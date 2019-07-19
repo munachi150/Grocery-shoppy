@@ -5,6 +5,7 @@
 @endsection
 
 @section('content')
+@include('flash::message')
 <div class="container mt-15">
 <div class="row clearfix" id="pics">
 	@foreach($product->pictures as $picture)

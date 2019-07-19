@@ -12,6 +12,10 @@ use Illuminate\Http\Request;
 
 class ProductController extends Controller
 {
+    public function __construct(){
+        $this->middleware('auth', ['except'=>['show','index']]);
+        $this->middleware('auth', ['except'=>['show','index']]);
+    }
     /**
      * Display a listing of the resource.
      *
@@ -42,13 +46,17 @@ class ProductController extends Controller
      */
     public function store(Request $request)
     {
+        $clean_price = $this->sanitize_num($request->price)*100;
+        $clean_old_price = $this->sanitize_num($request->old_price)*100;
+
         $product  = new Product();
         $product->name = $request->name;
-        $product->price = $request->price;
-        $product->old_price= $request->old_price;
+        $product->price = $clean_price;
+        $product->old_price= $clean_old_price;
         $product->description = $request->description;
         $product->sub_category_id = $request->sub_category;
         $product->category_id =  $request->category;
+        $product->special_offer = $request->special_offer;
         $product->url = str_slug($request->name);
         if ($request->hasFile('picture')) {
             $picName = "GRO".uniqid().time().'.'.$request->picture->getClientOriginalExtension();
@@ -56,6 +64,7 @@ class ProductController extends Controller
             $product->picture='uploads/'.$picName;
         }
         $product->save();
+        flash('please select your product pictures')->success();
         return redirect('products/pictures/'.$product->url);
     }
     
@@ -111,10 +120,11 @@ public function picture_destroy($id){
      */
     public function show($url)
     {$product =  Product::where('url', $url)->first();
+    $other_products = Product::orderBy('updated_at', 'desc')->where('special_offer', 2)->take(20)->get();
     if (!$product) {
         abort(404);
     }
-    return view('products.show', compact('product'));   
+    return view('products.show', compact('product','other_products'));   
     }
 
    
@@ -156,6 +166,7 @@ public function picture_destroy($id){
             $product->picture='uploads/'.$picName;
         }
         $product->save();
+        flash('Product updated successfully');
         return redirect('/');
     }
 
@@ -168,7 +179,8 @@ public function picture_destroy($id){
     public function destroy($id)
     {
         $product  =  Product::FindOrFail($id);
-        
+        $product->delete();
+        flash('Product deleted successfully')->success();
         return redirect('/');
     }
 }

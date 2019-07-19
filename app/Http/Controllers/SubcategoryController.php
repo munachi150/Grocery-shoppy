@@ -3,11 +3,16 @@
 namespace App\Http\Controllers;
 use App\Subcategory;
 use App\Category;
+use App\Product;
 
 use Illuminate\Http\Request;
 
 class SubcategoryController extends Controller
 {
+    public function __construct(){
+        $this->middleware('auth', ['except'=>['show','index']]);
+        $this->middleware('admin', ['except'=>['show','index']]);
+    }
     /**
      * Display a listing of the resource.
      *
@@ -15,7 +20,8 @@ class SubcategoryController extends Controller
      */
     public function index()
     {
-        //
+        $subcategories = Subcategory::all();
+        return view('subcategories.index',compact('subcategories'));
     }
 
     /**
@@ -47,6 +53,7 @@ class SubcategoryController extends Controller
             $subcategory->picture='uploads/'.$picName;
         }
         $subcategory->save();
+        flash('Subcategory created successfully');
         return redirect('/');
 
     }
@@ -102,7 +109,8 @@ public function delete($id)
             $subcategory->picture='uploads/'.$picName;
         }
         $subcategory->save();
-        return redirect('all_subcategories');
+        flash('Subcategory updated successfully');
+        return redirect('/');
 
     }
 
@@ -116,6 +124,7 @@ public function delete($id)
     {
         $subcategory = Subcategory::FindOrFail($id);
         $subcategory->delete();
-        return redirect('all_subcategories');
+        flash('Subcategory deleted successfully');
+        return redirect('/');
     }
     }

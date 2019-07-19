@@ -12,7 +12,7 @@ Delete groceries
 								<p>{{$product->name}}</p>
 							</div>
 							<div class="">
-								<p>{{$product->price}}</p>
+								<p>&#8358;{{number_format($product->price)}}</p>
 							</div>
 							<div class="">
 								<p>{{$product->category_id}}</p>
@@ -21,7 +21,7 @@ Delete groceries
 								<p>{{$product->sub_category_id}}</p>
 							</div>
 								<div class="">
-								<p>{{$product->old_price}}</p>
+								<p>&#8358;{{number_format($product->old_price)}}</p>
 							</div>
 							
 							<div class="">

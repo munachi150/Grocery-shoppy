@@ -1,7 +1,4 @@
-<!-- top-header -->
-	<div class="header-most-top">
-		<p>Grocery</p>
-	</div>
+
 	<!-- //top-header -->
 	<!-- header-bot-->
 	<div class="header-bot">
@@ -9,7 +6,7 @@
 			<!-- header-bot-->
 			<div class="col-md-4 logo_agile">
 				<h1>
-					<a href="index.html">
+					<a href="{{url('/')}}">
 						<span>G</span>rocery
 						<span>S</span>hoppy
 						<img src="{{url('images/logo2.png')}}" alt=" ">
@@ -35,8 +32,9 @@
 					<li>
 						<a href="{{url('logout')}}" data-toggle="modal">
 							 </a>
-							 <a href="#">Hi,{{auth()->user()->name}}</a>
+							 <a>Hi,{{auth()->user()->name}}</a>
 					</li>
+					@if(auth()->user()->isAdmin())
 					<li>
 						<a href="{{url('categories/create')}}" data-toggle="modal">
 						 New Category </a>
@@ -45,10 +43,16 @@
 						<a href="{{url('subcategories/create')}}" data-toggle="modal">
 							 SubCategory </a>
 					</li>
+					
 
 					<li>
 						<a href="{{url('products/create')}}" data-toggle="modal">
 						 Product </a>
+					</li>
+					@endif
+					<li>
+						<a href="{{url('categories')}}" data-toggle="modal">
+						 Categories </a>
 					</li>
 					<li>
 						<a href="{{url('logout')}}" data-toggle="modal">
@@ -82,9 +86,12 @@
 						<form action="#" method="post" class="last">
 							<input type="hidden" name="cmd" value="_cart">
 							<input type="hidden" name="display" value="1">
-							<button class="w3view-cart" type="submit" name="submit" value="">
-								<i class="fa fa-cart-arrow-down" aria-hidden="true"></i>
-							</button>
+								<span id="cart_count"></span>
+							<a class="w3view-cart" href="{{url('cart')}}" name="submit" value="">
+								<i class="fa fa-cart-arrow-down" aria-hidden="true">
+									
+								</i>
+							</a>
 						</form>
 					</div>
 				</div>
@@ -561,10 +568,10 @@
 		<div class="container">
 			<div class="agileits-navi_search">
 				
-					<select id="agileinfo-nav_search" name="agileinfo_search" required="">
+					<select id="agileinfo-nav_search" name="agileinfo_search" required="" onchange="window.location.href=this.value;">
 						<option value="">All Categories</option>
 						@foreach($categories as $category)
-						<option value="{{$category->name}}"><a href="{{url('/')}}">{{$category->name}}</a></option>
+						<option value="{{url('category/'.$category->url)}}"><a href="#">{{$category->name}}</a></option>
 						@endforeach
 					</select>
 			</div>
@@ -621,7 +628,7 @@
 									
 								</div>
 								<div class="col-sm-4 multi-gd-img">
-									<img src="" alt="">
+									<img src="{{url($category->picture)}}" alt="">
 								</div>
 								<div class="clearfix"></div>
 							</div>
@@ -629,36 +636,6 @@
 						</ul>
 					</li>
 					@endforeach
-				
-							
-								
-								<li class="">
-									<a class="nav-stylehead" href="{{url('faqs')}}">Faqs</a>
-								</li>
-								<!-- <li class="dropdown">
-									<a class="nav-stylehead dropdown-toggle" href="#" data-toggle="dropdown">Pages
-										<b class="caret"></b>
-									</a>
-									<ul class="dropdown-menu agile_short_dropdown">
-										<li>
-											<a href="{{url('groceries/create')}}">Create</a>
-										</li>
-										<li>
-											<a href="{{url('all_products')}}">All Products</a>
-										</li>
-										<li>
-											<a href="{{url('categories/create')}}">Create Category</a>
-										</li>
-										<li>
-											<a href="{{url('all_categories')}}">All Categories</a>
-										</li>
-										<li>
-											<a href="{{url('all_subcategories')}}">All Sub-Categories</a>
-										</li>
-										
-									</ul>
-
-								</li> -->
 								<li class="">
 									<a class="nav-stylehead" href="{{url('contacts')}}">Contact</a>
 								</li>

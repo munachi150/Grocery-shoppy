@@ -10,8 +10,8 @@ class NavigationComposer
 {
 	public function categories(View $view)
 	{
-		$categories = Category::all();
-		$subcategories = Subcategory::all();
+		$categories = Category::with(['products'])->get();
+		$subcategories = Subcategory::with(['products'])->get();
 		$view->with(['categories'=>$categories]);
 	}
 }

@@ -3,10 +3,15 @@
 namespace App\Http\Controllers;
 use App\Category;
 use App\Subcategory;
+use App\Product;
 use Illuminate\Http\Request;
 
 class CategoryController extends Controller
 {
+    public function __construct(){
+        $this->middleware('auth', ['except'=>['show','index']]);
+        $this->middleware('admin', ['except'=>['show','index']]);
+    }
     /**
      * Display a listing of the resource.
      *
@@ -14,7 +19,8 @@ class CategoryController extends Controller
      */
     public function index()
     {
-        
+        $categories = Category::OrderBy('name')->get();
+     return view('categories.index', compact('categories'));   
     }
 
     /**
@@ -44,6 +50,7 @@ class CategoryController extends Controller
            $category->picture= 'uploads/'.$picName;
        }
        $category->save();
+       flash('Category created successfully');
        return redirect('/');
     }
 
@@ -56,10 +63,12 @@ class CategoryController extends Controller
     public function show($url)
     {
         $category = Category::where('url', $url)->first();
+        $products = Product::all();
+        $subcategories = Subcategory::all();
         if (!$category) {
             abort(404);
         }
-        return view('categories.show', compact('category'));
+        return view('categories.show', compact('category', 'products', 'subcategories'));
     }
 
     /**
@@ -95,8 +104,8 @@ class CategoryController extends Controller
            $category->picture= 'uploads/'.$picName;
        }
        $category->save();
-       
-       return redirect('all_categories');
+       flash('Category updated successfully');
+       return redirect('/');
     }
 
     /**
@@ -109,6 +118,7 @@ class CategoryController extends Controller
     {
         $category= Category::FindOrFail($id);
         $category->delete();
-        return redirect('all_categories');
+        flash('Category deleted successfully');
+        return redirect('/');
     }
 }

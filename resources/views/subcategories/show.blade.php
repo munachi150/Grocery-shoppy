@@ -16,7 +16,15 @@ Show Sub-ategory
 						<a href="{{url('/')}}">Home</a>
 						<i>|</i>
 					</li>
+					@auth
+					@if(auth()->user()->isAdmin())
 					<li>Kitchen Products</li>
+					<ul style="display: flex; justify-content: flex-end; align-items: center;">
+					<li style="margin-right: 20px; "><a href="{{url('subcategories/edit/'.$subcategory->id)}}" class="btn btn-primary">Edit</a></li>
+					<li><a href="{{url('subcategories/delete/'.$subcategory->id)}}" class="btn btn-danger">Delete</a></li>
+					@endif
+					@endauth
+				</ul>
 				</ul>
 			</div>
 		</div>
@@ -289,31 +297,29 @@ Show Sub-ategory
 										<del>&#8358; {{number_format($product->old_price/100, 2)}}</del>
 									</div>
 									<div class="snipcart-details top_brand_home_details item_add single-item hvr-outline-out">
-			<form action="#" method="post">
-				<fieldset>
-					<input type="hidden" name="cmd" value="_cart" />
-					<input type="hidden" name="add" value="1" />
-					<input type="hidden" name="business" value=" " />
-					<input type="hidden" name="item_name" value="Zeeba Basmati Rice - 5 KG" />
-					<input type="hidden" name="amount" value="950.00" />
-					<input type="hidden" name="discount_amount" value="1.00" />
-					<input type="hidden" name="currency_code" value="USD" />
-					<input type="hidden" name="return" value=" " />
-					<input type="hidden" name="cancel_return" value=" " />
-					<input type="submit" name="submit" value="Add to cart" class="button" />
-				</fieldset>
-			</form>
-				</div>
+										<form action="#" method="post">
+											<fieldset>
+												<input type="hidden" name="cmd" value="_cart" />
+												<input type="hidden" name="add" value="1" />
+												<input type="hidden" name="business" value=" " />
+												<input type="hidden" name="item_name" value="Vim Dishwash Gel, 500 ml" />
+												<input type="hidden" name="amount" value="99.00" />
+												<input type="hidden" name="discount_amount" value="1.00" />
+												<input type="hidden" name="currency_code" value="USD" />
+												<input type="hidden" name="return" value=" " />
+												<input type="hidden" name="cancel_return" value=" " />
+												<a href="javascript:addcart_with({{$product->id}})"  class="btn btn-primary"> Add to cart</a>
+											</fieldset>
+										</form>
+									</div>
+                                     <div id="cart_feedback"></div>
+								</div>
+							</div>
+						</div>
+						@endforeach
 
-			</div>
-		</div>
-		
-	</div>
-	@endforeach
-
-						
-						<div class="clearfix"></div>
-					</div>
+                     <div class="clearfix"></div>
+                     </div>
 					<!-- //first section -->
 					<!-- 2nd section) -->
 					
@@ -324,4 +330,19 @@ Show Sub-ategory
 			<!-- //product right -->
 		</div>
 	</div>
+@endsection
+@section('scripts')
+<script> 
+
+function addcart_with(product_id){
+console.log(product_id);
+let feedback = document.getElementById('cart_feedback');
+feedback.innerHTML = "";
+$('#cart_feedback').load(base+'/product/cart_alert/'+product_id);
+cart_count();
+
+}
+
+</script>
+
 @endsection

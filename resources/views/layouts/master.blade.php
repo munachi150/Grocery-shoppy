@@ -129,33 +129,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 
 	<!-- flexisel (for special offers) -->
 	<script src="{{url('js/jquery.flexisel.js')}}"></script>
-	<script>
-		$(window).load(function () {
-			$("#flexiselDemo1").flexisel({
-				visibleItems: 3,
-				animationSpeed: 1000,
-				autoPlay: true,
-				autoPlaySpeed: 3000,
-				pauseOnHover: true,
-				enableResponsiveBreakpoints: true,
-				responsiveBreakpoints: {
-					portrait: {
-						changePoint: 480,
-						visibleItems: 1
-					},
-					landscape: {
-						changePoint: 640,
-						visibleItems: 2
-					},
-					tablet: {
-						changePoint: 768,
-						visibleItems: 2
-					}
-				}
-			});
-
-		});
-	</script>
+	
 	<!-- //flexisel (for special offers) -->
 
 	<!-- password-script -->
@@ -265,14 +239,43 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 
 		});
 	</script>
-	<!-- //flexisel (for special offers) -->
-
+	
 	<script src="{{url('js/bootstrap.js')}}"></script>
 
-	<!-- //for bootstrap working -->
-	<!-- //js-files -->
+	<script>
+	$('div.alert').not('.alert-important').delay(3000).fadeOut(350);
+	</script>
 
+   <script>
+   	const base = document.getElementById('base').value;
+   	console.log(base);
+   	$('document').ready(function() {
+   		cart_count();
+   	})
+   	 function cart_count() 
+   	 {
+   	 	$('#cart_count').load(base+'/cart/counter');
+   	 }
+   	 function addcart(product_id)
+      {
+      	console.log(product_id);	
+      	let feedback = document.getElementById('cart_feedback'+product_id);
+      	feedback.innerHTML = `<div class="alert alert-info" role="alert"><buttontype="button"class="close" data-dismiss="alert" aria-hidden="true">&times; </button>Processing ..</div>`;
+      	$('#cart_feedback'+product_id).load(base+'/product/cart/'+product_id);
+      	cart_count();
+      }
+      function add_cart(product_id){
+      	console.log(product_id);
+      	let feed = document.getElementById('cart_feed'+product_id);
+      	feed.innerHTML = `<div class="alert alert-info" role="alert"><button type="button" class="close" data-dismiss="alert"  aria-hidden="true">&times; </button>Processin ..</div>`;
+      	$('#cart_feed'+product_id).load(base+'/product/cart_offer/'+product_id);
+      	cart_count();
+      }
+      
+   </script>
 @yield('pagejs')
+@yield('scripts')
+
 </body>
 
 </html>
